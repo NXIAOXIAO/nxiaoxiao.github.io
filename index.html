@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NXIAOXIAO</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <style>
+      body {
+        margin: 0;
+        background-color: #1e1e2f;
+        color: #fff;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        position: relative;
+      }
+
+      /* 顶部标题栏 */
+      header {
+        width: 100%;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-sizing: border-box;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 1.8rem;
+      }
+
+      .about-button {
+        background-color: transparent;
+        color: #ccc;
+        border: 1px solid #555;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .about-button:hover {
+        background-color: #333;
+        color: #fff;
+      }
+
+      /* 新的卡片容器样式 */
+      .cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 700px;
+        padding: 0 1rem;
+        box-sizing: border-box;
+        height: calc(100vh - 220px);
+        max-height: calc(100vh - 220px); /* 留空间给头部和输入框 */
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #c3d1c8 #2c2c3e;
+      }
+
+      /* 自定义滚动条（Chrome） */
+      .cards::-webkit-scrollbar {
+        width: 8px;
+      }
+      .cards::-webkit-scrollbar-track {
+        background: #2c2c3e;
+        border-radius: 8px;
+      }
+      .cards::-webkit-scrollbar-thumb {
+        background-color: #4ade80;
+        border-radius: 8px;
+      }
+
+      .card {
+        background-color: #2c2c3e;
+        border-radius: 1rem;
+        padding: 1.2rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s;
+        cursor: pointer;
+      }
+      .card:hover {
+        transform: scale(1.02);
+      }
+
+      .card h2 {
+        margin: 0 0 0.5rem;
+        font-size: 1.25rem;
+      }
+
+      .card p {
+        margin: 0;
+        color: #ccc;
+      }
+
+      /* 聊天框样式 */
+      .chat-container {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 800px;
+        height: 80px;
+        background: #2a2a3c;
+        border-radius: 1rem;
+        padding: 0.5rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        display: flex;
+      }
+
+      .chat-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        background-color: #1e1e2f;
+        color: white;
+      }
+
+      .chat-input:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #4ade80;
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 1.2rem;
+        }
+        .about-button {
+          padding: 0.3rem 0.7rem;
+          font-size: 0.85rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>📁 我的项目集合</h1>
+      <button class="about-button" onclick="window.location.href='about.html'">
+        关于我
+      </button>
+    </header>
+
+    <div class="cards" id="cards"></div>
+
+    <div class="chat-container">
+      <input
+        type="text"
+        class="chat-input"
+        id="chatInput"
+        placeholder="可以直接双击打开，或输入项目名称，如 CopyDraw，然后回车打开..."
+      />
+    </div>
+
+    <script>
+      const projects = [
+        {
+          name: 'CopyDraw',
+          path: './Projects/CopyDraw/index.html',
+          desc: '一个用来抄画的简单工具，无框架的实验性实现'
+        }
+        // 可继续添加其他项目
+      ]
+
+      const cardsContainer = document.getElementById('cards')
+      projects.forEach((proj) => {
+        const card = document.createElement('div')
+        card.className = 'card'
+        card.innerHTML = `<h2>${proj.name}</h2><p>${proj.desc}</p>`
+        card.ondblclick = () => (window.location.href = proj.path)
+        cardsContainer.appendChild(card)
+      })
+
+      const chatInput = document.getElementById('chatInput')
+      chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const text = chatInput.value.trim()
+          const found = projects.find((p) => p.name === text)
+          if (found) {
+            window.location.href = found.path
+          } else {
+            alert('未找到该项目，请检查名称是否正确（区分大小写）')
+          }
+          chatInput.value = ''
+        }
+      })
+    </script>
+  </body>
+</html>
